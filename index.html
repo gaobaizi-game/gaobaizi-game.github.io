@@ -1,19 +1,224 @@
-<!--
-维护日志
-;;如果写维护日志,请不要删除原来的日志,按照以下格式写即可.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-2020-2-1/9:8
-一棵树的力量 维护
-优化
-优化一些不合理的地方,
-并且修改少量代码.
-2020-2-1/12:55
-一棵树的力量 维护
-修改
-增加注释,方便维护.
--->
 <html>
 <head>
+<script luaguage="javascript" type="text/javascript">
+			 var brm = {  
+				  init: function() {  
+					  this.brtype = this.getBrowser().browser || "unknown";  //获取浏览器名
+					  this.brver = this.getBrowser().version || "unknown";  //获取浏览器版本
+					  this.ostype = this.getOS() || "unknown"; //系统类型
+					  this.osver=this.getDigits()||"unknown";//系统版本
+				  },  
+				  getOS: function() {  //判断所处操作系统
+						 var sUserAgent = navigator.userAgent.toLowerCase();   
+						
+						var isWin = (navigator.platform == "Win32") || (navigator.platform == "Win64")|| (navigator.platform == "wow64");   
+						
+						var isMac = (navigator.platform == "Mac68K") || (navigator.platform == "MacPPC") || (navigator.platform == "Macintosh") || (navigator.platform == "MacIntel");   
+						if (isMac) return "Mac";   
+						var isUnix = (navigator.platform == "X11") && !isWin && !isMac;   
+						if (isUnix) return "Unix";   
+						var isLinux = (String(navigator.platform).indexOf("Linux") > -1);   
+						var bIsAndroid = sUserAgent.toLowerCase().match(/android/i) == "android";  
+						if (isLinux) {  
+						if(bIsAndroid) return "Android";  
+						else return "Linux";   
+						}  
+						if (isWin) {   
+						
+							var isWin2K = sUserAgent.indexOf("Windows nt 5.0") > -1 || sUserAgent.indexOf("Windows 2000") > -1;   
+							if (isWin2K) return "Win2000";   
+							var isWinXP = sUserAgent.indexOf("Windows nt 5.1") > -1 || sUserAgent.indexOf("Windows XP") > -1  
+							sUserAgent.indexOf("Windows XP") > -1;   
+							if (isWinXP) return "WinXP";   
+							var isWin2003 = sUserAgent.indexOf("Windows nt 5.2") > -1 || sUserAgent.indexOf("Windows 2003") > -1;   
+							if (isWin2003) return "Win2003";   
+							var isWinVista= sUserAgent.indexOf("Windows nt 6.0") > -1 || sUserAgent.indexOf("Windows Vista") > -1;   
+							if (isWinVista) return "WinVista";   
+							var isWin7 = sUserAgent.indexOf("Windows nt 6.1") > -1 || sUserAgent.indexOf("Windows 7") > -1;   
+							if (isWin7) return "Win7";   
+							var isWin8 = sUserAgent.indexOf("windows nt 6.2") > -1 || sUserAgent.indexOf("Windows 8") > -1;  
+							if (isWin8) return "Win8"; 
+							var isWin10 = sUserAgent.indexOf("windows nt 10.0")>-1||sUserAgent.indexOf("Windows 10")>-1;	
+							if(isWin10)return "Win10";				
+						}  
+						return "其他";
+				  },  
+				  getDigits:function(){ //判断当前操作系统的版本号 
+					var sUserAgent = navigator.userAgent.toLowerCase();   
+					var is64 = sUserAgent.indexOf("win64") > -1||sUserAgent.indexOf("wow64") > -1;  
+					if (is64) {  
+						return "64";  
+					}else{  
+					   return "32";    
+					}  
+				},
+				  getBrowser: function() {  // 获取浏览器名
+					  var rMsie = /(msie\s|trident\/7)([\w\.]+)/;  
+					  var rTrident = /(trident)\/([\w.]+)/;  
+					  var rEdge = /(chrome)\/([\w.]+)/;//IE
+					  
+					  var rFirefox = /(firefox)\/([\w.]+)/;  //火狐
+					  var rOpera = /(opera).+version\/([\w.]+)/;  //旧Opera
+					  var rNewOpera = /(opr)\/(.+)/;  //新Opera 基于谷歌
+					  var rChrome = /(chrome)\/([\w.]+)/; //谷歌 
+					  var rUC = /(chrome)\/([\w.]+)/;//UC
+					  var rMaxthon = /(chrome)\/([\w.]+)/;//遨游
+					  var r2345 =  /(chrome)\/([\w.]+)/;//2345
+					  var rQQ =  /(chrome)\/([\w.]+)/;//QQ
+					  //var rMetasr =  /(metasr)\/([\w.]+)/;//搜狗
+					  var rSafari = /version\/([\w.]+).*(safari)/;
+					  
+					  var ua = navigator.userAgent.toLowerCase();  
+ 
+ 
+					  var matchBS, matchBS2;  
+					  
+					  //IE 低版
+					  matchBS = rMsie.exec(ua);  
+					  if (matchBS != null) {  
+						  matchBS2 = rTrident.exec(ua);  
+						  if (matchBS2 != null) {  
+							  switch (matchBS2[2]) {  
+							  case "4.0":  
+								  return {  
+									  browser:  
+									  "Microsoft IE",  
+									  version: "IE: 8"  //内核版本号
+								  };  
+								  break;  
+							  case "5.0":  
+								  return {  
+									  browser:  
+									  "Microsoft IE",  
+									  version: "IE: 9"  
+								  };  
+								  break;  
+							  case "6.0":  
+								  return {  
+									  browser:  
+									  "Microsoft IE",  
+									  version: "IE: 10"  
+								  };  
+								  break;  
+							  case "7.0":  
+								  return {  
+									  browser:  
+									  "Microsoft IE",  
+									  version: "IE: 11"  
+								  };  
+								  break;  
+							  default:  
+								  return {  
+									  browser:  
+									  "Microsoft IE",  
+									  version: "Undefined"  
+								  };  
+							  }  
+						  } else {  
+							  return {  
+								  browser: "Microsoft IE",  
+								  version: "IE:"+matchBS[2] || "0"  
+							  };  
+						  }  
+					  }  
+					  //IE最新版
+					   matchBS = rEdge.exec(ua);  	 				   
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "Microsoft Edge",  
+							  version: "Chrome/"+matchBS[2] || "0"  
+						  };  
+					  }  
+                                          //UC浏览器					  
+					  matchBS = rUC.exec(ua);                         		   
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "UC",  
+							  version: "Chrome/"+matchBS[2] || "0"  
+						  };  
+					  }  
+					  //火狐浏览器
+					  matchBS = rFirefox.exec(ua);  
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "Firefox",  
+							  version: "Firefox/"+matchBS[2] || "0"  
+						  };  
+					  }  
+                                         //Oper浏览器					 
+					 matchBS = rOpera.exec(ua);  
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "Opera",  
+							  version: "Chrome/"+matchBS[2] || "0"  
+						  };  
+					  }  
+					  //遨游
+					   matchBS = rMaxthon.exec(ua);  	 				   
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "遨游",  
+							  version: "Chrome/"+matchBS[2] || "0"  
+						  };  
+					  }  
+                                          //2345浏览器					  
+ 					  matchBS = r2345.exec(ua);  	 				   
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "2345",  
+							  version: "Chrome/ "+matchBS[2] || "0"  
+						  };  
+					  }  
+                                          //QQ浏览器					  
+					  matchBS = rQQ.exec(ua);  	 				   
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  return {  
+							  browser: "QQ",  
+							  version: "Chrome/"+matchBS[2] || "0"  
+						  };  
+					  }  
+					  //Safari（苹果）浏览器
+					  matchBS = rSafari.exec(ua);  
+					  if ((matchBS != null) && (!(window.attachEvent)) && (!(window.chrome)) && (!(window.opera))) {  
+						  return {  
+							  browser: "Safari",  
+							  version: "Safari/"+matchBS[1] || "0"  
+						  };  
+					  }  
+					  //谷歌浏览器
+					   matchBS = rChrome.exec(ua);  
+					  if ((matchBS != null) && (!(window.attachEvent))) {  
+						  matchBS2 = rNewOpera.exec(ua);  
+						  if (matchBS2 == null) {  
+							  return {  
+								  browser: "Chrome",  
+								  version: "Chrome/"+matchBS[2] || "0"  
+							  };  
+						  } else {  
+							  return {  
+								  browser: "Opera",  
+								  version: "opr/"+matchBS2[2] || "0"  
+							  };  
+						  }  
+					  }  
+				  }  
+      };  
+      brm.init();  
+      var dd="检测到适用你系统的版本\n点击确定自动跳转,点击取消手动选择\n你的操作系统是:"+brm.ostype+brm.osver+"位";
+      //brm.ostype osver brtype brver
+if(brm.ostype=="Android"){
+    if(confirm(dd))
+    window.location.href="android/index.html";
+}else if(brm.ostype=="Linux"){
+    if(confirm(dd))
+    window.location.href="linux/index.html";
+}else if((navigator.platform == "Win32") || (navigator.platform == "Win64")|| (navigator.platform == "wow64")){
+    if(confirm(dd))
+    window.location.href="windows/index.html";
+}else{
+    alert("我们可能没有为你的操作系统提供的版本,如果是误判,你可以通过下面的超链接手动跳转.\n你的操作系统是:"+brm.ostype+brm.osver+"位");
+}
+</script>
 <title>搞摆子游戏制作团队</title>
 <link rel="stylesheet" href="css/lion.css" type="text/css" />
 <!--使用样式文件lion.css-->
@@ -28,24 +233,12 @@
 <h1>搞摆子游戏制作团队</h1>
 <hr />
 <!--~~~~~~~~~~~~~~~~~以上代码请勿改动~~~~~~~~~~~~~~~~~~-->
-<p>我们的游戏：</p>
-<p><strong>周某偷电瓶小游戏</strong><a href='https://www.lanzous.com/b00t7hs2j'>   历代版本</a></p>
-<p>如果你要玩<strong>周某偷电瓶小游戏</strong>，请点击<a href='https://gaobaizi-game.github.io/3.rar'>这里</a>下载。</p>
-<p><strong>勇士打怪兽小游戏</strong><a href='https://www.lanzous.com/b00t7hu9i'>   历代版本</a></p>
-<p>如果你要玩<strong>勇士打怪兽小游戏</strong>，请点击<a href='https://gaobaizi-game.github.io/2.rar'>这里</a>下载。</p>
-<p><strong>狼人杀小游戏</strong><a href='https://www.lanzous.com/b00t8bgch'>   历代版本</a></p>
-<p>如果你要玩<strong>狼人杀小游戏</strong>，请点击<a href='https://gaobaizi-game.github.io/1.rar'>这里</a>下载。</p>
-<p><a href="https://gaobaizi-game.github.io/we.html">关于我们</a></p>
-<hr />
-<p>周某偷电瓶小游戏：由<em>最强的琛</em>、<em>竹林空影</em>、<em>hy</em>制作</p>
-<p>勇士打怪兽小游戏：由<em>老蒋</em>、<em>最强的琛</em>制作</p>
-<p>狼人杀小游戏：由<em>最强的琛</em>制作</p>
-<hr/>
-<a href="https://yp20245803-2.icoc.vc">前往反馈网</a>
-<hr/>
-<p><a href='https://gaobaizi-game.github.io/Android_phone.html'>前往Android手机版</a></p>
-<hr/>
-<a href="we.html">关于我们 - 搞摆子游戏制作团队</a>
+<noscript>请更换Chrome等支持javascript的浏览器<br></noscript>
+选择你的系统查看相应版本<br>
+<a href="windows/index.html">Windows版本</a><br>
+<a href="android/index.html">Android版本</a><br>
+<a href="linux/index.html">Linux版本</a><br>
+<a href="we.html">关于我们</a>
 <!--~~~~~~~~~~~~~~~~~~以下代码请勿改动!!!~~~~~~~~~~~~~~-->
 </center>
 <hr/>
